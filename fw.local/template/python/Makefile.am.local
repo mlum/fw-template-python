@@ -1,0 +1,8 @@
+# put whatever (auto)make commands here, they will be included from Makefile.am
+pythontemplatedir = $(prefix)/share/fw/template/@FW_TEMPLATE_TEMPLATE_TYPE@
+
+dist_pythontemplate_DATA = \
+  Makefile_dot_am          \
+  configure.ac             \
+  Makefile_dot_am_template
+
