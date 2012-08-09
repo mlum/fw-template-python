@@ -1,0 +1,7 @@
+.*
+Makefile.am
+fw.local
+megatmp
+share
+test-template
+test-template.out
