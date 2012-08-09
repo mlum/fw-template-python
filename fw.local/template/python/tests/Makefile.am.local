@@ -1,4 +1,5 @@
 # put whatever (auto)make commands here, they will be included from Makefile.am
 
-SUBDIRS += m4
+TESTS = \
+  tests.py
 

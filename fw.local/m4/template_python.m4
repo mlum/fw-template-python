@@ -1,0 +1,4 @@
+AC_DEFUN([FW_TEMPLATE_PYTHON],
+[
+  AC_CONFIG_FILES([tests/Makefile])
+])

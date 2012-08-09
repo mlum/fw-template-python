@@ -39,6 +39,21 @@ fw_source "python/bootstrap" "sh/validate-args.sh"
 
 parse_args "python/bootstrap" "$@"
 
-validate_args "python/bootstrap" "revision" ""
+validate_args "python/bootstrap" "" ""
+
+for dir in . tests
+  do
+    for x in Makefile_dot_am            \
+             configure.ac 
+      do
+        target=`echo "$x" | perl -pe 's/_dot_am/.am/;'`
+
+        bootstrap_link_optional "template/python/$dir/$x"       \
+                                "$dir"                          \
+                                "$target"                       \
+        || fatal "python/bootstrap"
+
+      done
+  done
 
 fw_exec "build/automake/bootstrap" "$@"

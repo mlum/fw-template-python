@@ -49,7 +49,7 @@ fw_exec "build/automake/init" "$@" || fatal "python/init"
 
 parse_args "python/init" "$@"
 
-# validate_args "python/init" "" ""
+validate_args "python/init" "name" ""
 
 
 fw_exec "revision/$revision/ignore-files"       \
@@ -57,8 +57,58 @@ fw_exec "revision/$revision/ignore-files"       \
   '*.pyo'                                       \
 || fatal "python/init"
 
-fw_find "template/python/Makefile_dot_am_template" makefile
+fw_find "template/python/setup.py" setup_py
 
-cp -f "$makefile" "./Makefile.am.local" \
-|| fatal "python/bootstrap"
+cp -f "$setup_py" "./setup.py" || fatal "python/init"
+fw_exec "revision/$revision/add-files" "setup.py" || fatal "python/init"
 
+mkdir ${name} || fatal "python/init"
+cat <<'EOD' >> ${name}/__init__.py
+# new module
+EOD
+fw_exec "revision/$revision/add-dir" "${name}" || fatal "python/init"
+
+for dir in tests
+  do
+    mkdir "$dir" || fatal "python/init"
+    fw_exec "revision/$revision/add-dir" "$dir" || fatal "python/init"
+
+    for x in Makefile.am.local
+      do
+        fw_find "template/python/$dir/$x" file
+        test -z "$file" && fatal "python/init"
+        cp -f "$file" "$dir" || fatal "python/init"
+        chmod +w "$dir/$x" || fatal "python/init"
+      done
+
+    for x in tests.py
+      do
+        fw_find "template/python/$dir/$x" file
+        test -z "$file" || {
+          cp -f "$file" "$dir" || fatal "python/init"
+          chmod +w "$dir/$x" || fatal "python/init"
+        }
+      done
+
+    (
+      cd "$dir" &&                              \
+      fw_exec "revision/$revision/add-files"    \
+        Makefile.am.local                       \
+        tests.py &&                             \
+      fw_exec "revision/$revision/ignore-files" \
+        Makefile                                \
+        '*.pyc'                                 \
+        '*.pyo'                                 \
+    ) || fatal "python/init"
+  done
+
+(
+  cd "${name}" &&                                \
+  fw_exec "revision/$revision/add-files"         \
+    __init__.py &&                               \
+  fw_exec "revision/$revision/ignore-files"      \
+    '*.pyc'                                      \
+    '*.pyo'                                      \
+) || fatal "python/init"
+
+ 
