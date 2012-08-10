@@ -9,4 +9,4 @@ dist_pythontemplate_DATA = \
   configure.ac
 
 dist_pythontemplate_SCRIPTS = \
-  setup.py
+  setup.py.in

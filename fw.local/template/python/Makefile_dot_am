@@ -2,3 +2,5 @@ include $(top_srcdir)/fw/build/automake/Makefile_dot_am
 
 SUBDIRS += tests
 
+EXTRA_DIST += \
+  setup.py

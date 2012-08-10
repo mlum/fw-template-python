@@ -4,6 +4,14 @@ check_SCRIPTS = tests.py
 
 CLEANFILES =
 
+MAINTAINERCLEANFILES =   \
+  Makefile.am            \
+  Makefile.in
+
+EXTRA_DIST =        \
+  tests.py          \
+  $(wildcard *.js)
+
 include $(top_srcdir)/fw/build/automake/check-shell.am
 include $(top_srcdir)/fw/build/automake/gnu-make-check.am
 include $(top_srcdir)/tests/Makefile.am.local

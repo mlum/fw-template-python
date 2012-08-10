@@ -57,10 +57,11 @@ fw_exec "revision/$revision/ignore-files"       \
   '*.pyo'                                       \
 || fatal "python/init"
 
-fw_find "template/python/setup.py" setup_py
+fw_find "template/python/setup.py.in" setup_py
 
-cp -f "$setup_py" "./setup.py" || fatal "python/init"
-fw_exec "revision/$revision/add-files" "setup.py" || fatal "python/init"
+cp -f "$setup_py" "./setup.py.in" || fatal "python/init"
+fw_exec "revision/$revision/add-files" "setup.py.in" || fatal "python/init"
+fw_exec "revision/$revision/ignore-files" "setup.py" || fatal "python/init"
 
 mkdir ${name} || fatal "python/init"
 cat <<'EOD' >> ${name}/__init__.py
